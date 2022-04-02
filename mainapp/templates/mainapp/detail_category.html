@@ -1,0 +1,17 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %} {{ maps.name }}{% endblock title %}
+
+{% block content %}
+
+    <h2>Место раскидки</h2>
+    {% for place in places %}
+        {% for grenade in grenades %}
+            <p><a href="{% url 'place_detail' map_name=grenade.map.slug place=place.slug %}">{{ place.name }}</a></p>
+        {% endfor %}
+    {% endfor %}
+
+    {% for grenad in grenades %}
+        <p>Раскидка - {{ grenad.title }}</p>
+    {% endfor %}
+{% endblock content %}

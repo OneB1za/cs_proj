@@ -1,0 +1,18 @@
+
+{% extends 'mainapp/base.html' %}
+
+{% block title %} --- {% endblock title %}
+
+{% block content %}
+
+    {% for grenade in grenades %}
+        <p>{{ grenade.title }}</p>
+        <p>{{ grenade.description }}</p>
+        <img src="{{ grenade.image.url }}" alt="{{ grenade.image }}" width="650px" height="400">
+
+        <video controls width="650px" height="400">
+            <source src="{{ grenade.video.url }}" >
+        </video>
+    {% endfor %}
+
+{% endblock content %}

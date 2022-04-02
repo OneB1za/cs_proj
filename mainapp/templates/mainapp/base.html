@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock title %}</title>
+</head>
+<body>
+
+    <h1><a href="/">Home</a></h1>
+
+    {% block content %}
+        <h2>Карты</h2>
+        <ul>
+            {% for map in maps %}
+                <li><a href="{{ map.get_url }}">{{ map.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endblock content %}
+</body>
+</html>
