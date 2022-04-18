@@ -1,6 +1,4 @@
 from django.db import models
-
-# Create your models here.
 from django.urls import reverse
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from PIL import Image
@@ -9,10 +7,14 @@ from io import BytesIO
 
 
 def get_product_url(obj, viewname):
+    """Функция для навигации по урлам"""
+
     return reverse(viewname, kwargs={'map_name': obj.map.slug, 'place': obj.place_on_map.slug, 'title_slug': obj.slug})
 
-# Категори на будущее
+
 class Category(models.Model):
+    """Класс модели базы данных для категорий"""
+
     name = models.CharField(max_length=96, verbose_name='Имя категория')
     slug = models.SlugField(unique=True)
 
@@ -23,10 +25,10 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
         verbose_name = 'Категория'
 
-    # Таблица карт
-
 
 class MapCsGo(models.Model):
+    """Класс модели базы данных для карт"""
+
     name = models.CharField(max_length=96, verbose_name='Карта')
     slug = models.SlugField(unique=True)
     category = models.ForeignKey(Category, verbose_name='Категория', max_length=128,
@@ -44,8 +46,9 @@ class MapCsGo(models.Model):
         return reverse('detail_grenads', args=(self.slug,))
 
 
-# ПОЛОЖЕНИЕ ПЛЕЙС ОПАСНО НОЧЬЮ ДЕЛАЮ ЗАВТРА НИЧЕГО МОГУ НЕ ВСПОМНИТЬ
 class Place(models.Model):
+    """Класс модели базы данных для мест на карте(плентов)"""
+
     name = models.CharField(max_length=64, verbose_name='Место на карте')
     slug = models.SlugField(unique=True)
 
@@ -57,13 +60,12 @@ class Place(models.Model):
         verbose_name = 'Место на карте'
 
     def get_url(self):
-        return get_product_url2(self, 'place_detail')
-        #return reverse('place_detail', kwargs={"place": self.slug})  # place_detail
+        return reverse('place_detail', kwargs={"place": self.slug})  # place_detail
 
 
 # название класса сменить на более подходящее
 class Content(models.Model):
-    # Раскидки
+    """Класс модели базы данных для раскидок"""
 
     MIN_RESOLUTION = (450, 300)
     MAX_RESOLUTION = (451, 301)
@@ -82,7 +84,7 @@ class Content(models.Model):
     category = models.ForeignKey(Category, verbose_name='Категория', max_length=128, on_delete=models.CASCADE)
     map = models.ForeignKey(MapCsGo, max_length=128, verbose_name='Карта', on_delete=models.CASCADE)
     place_on_map = models.ForeignKey(Place, verbose_name='Место на карте', on_delete=models.CASCADE,
-                                     max_length=128)  # blank=True, null=True
+                                     max_length=128)
     difficulty = models.CharField(choices=DIFFICULTY_CHOISE_FIELD, verbose_name='Сложность броска', null=True,
                                   blank=True, max_length=12)
     title = models.CharField(max_length=128, verbose_name='Название раскидки')
@@ -101,8 +103,9 @@ class Content(models.Model):
     def get_url(self):
         return get_product_url(self, 'grenade_detail_correct')
 
-    # метод по обрезанию изображения миникарты
     def save(self, *args, **kwargs):
+        """Метод по обрезанию изображения миниатюры в админке"""
+
         image = self.image
         img = Image.open(image)
         new_img = img.convert('RGB')
@@ -118,8 +121,9 @@ class Content(models.Model):
         super().save(*args, **kwargs)
 
 
-# комментарии
 class Comments(models.Model):
+    """Класс модели базы данных для комментариев"""
+
     email = models.EmailField(max_length=96)
     name = models.CharField(max_length=48, verbose_name='Имя')
     text = models.TextField(max_length=1000, verbose_name='Сообщение')

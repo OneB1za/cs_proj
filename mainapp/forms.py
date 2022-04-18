@@ -1,21 +1,20 @@
-# from django.forms import forms
+
 from django import forms
 from captcha.fields import CaptchaField
 from .models import Comments
 
-'''Форма для обратной связи/feedback'''
 
-
-# не лучшая форма для теста капчи и фидбека
 class ContactForm(forms.Form):
+    """Форма для обратной связи(сырая)..
+        учился работать с самой простой капчей"""
     name = forms.CharField(max_length=64, label='Имя')
     email = forms.EmailField(max_length=96, label='Email')
     text = forms.CharField(widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}))
     captcha = CaptchaField()
 
 
-# форма для комментариев
 class CommentsForm(forms.ModelForm):
+    """Форма для добавления комментариев"""
     class Meta:
         model = Comments
         fields = ('name', 'email', 'text')

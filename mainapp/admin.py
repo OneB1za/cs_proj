@@ -1,21 +1,16 @@
 from django.contrib import admin
-from django.forms import (ModelChoiceField,
-                          ModelForm)
+from django.forms import (ModelChoiceField, ModelForm)
 from django.utils.safestring import mark_safe
-from .models import (Category,
-                     MapCsGo,
-                     Content,
-                     Place,
-                     Comments,)
+from .models import (Category, MapCsGo, Content, Place, Comments, )
 
-'''Админка'''
 admin.site.site_header = 'Главная страница'
 admin.site.index_title = 'Таблицы для создания записей на сайте'
 
 
-# категории
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    """Модель категорий в админке"""
+
     prepopulated_fields = {'slug': ('name',)}
     list_display = ['name']
     list_filter = ['name']
@@ -24,9 +19,10 @@ class CategoryAdmin(admin.ModelAdmin):
     ordering = []
 
 
-# карты
 @admin.register(MapCsGo)
 class MapCsGoAdmin(admin.ModelAdmin):
+    """Модель карт в админке"""
+
     prepopulated_fields = {'slug': ('name',)}
     list_display = ['name']
     list_filter = ['name']
@@ -35,8 +31,8 @@ class MapCsGoAdmin(admin.ModelAdmin):
     ordering = []
 
 
-# раскидки
 class ContentAdminForm(ModelForm):
+    """Форма для раскидок"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -48,6 +44,8 @@ class ContentAdminForm(ModelForm):
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
+    """Модель раскидок для админки"""
+
     prepopulated_fields = {'slug': ('title',)}  # автозаполнение с авто подключением жса
     fields = (
         'category', 'map', 'place_on_map', 'difficulty', 'title', 'slug', 'description', 'image', 'get_html_image',
@@ -67,7 +65,7 @@ class ContentAdmin(admin.ModelAdmin):
             return ModelChoiceField(Category.objects.filter(slug='raskidki'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    # функция для отображения фоток в админки
+    # функция для отображения фоток в админке
     def get_html_image(self, object):
         # проверка на существование картинки у конкретной раскидки
         if object.image:
@@ -77,9 +75,9 @@ class ContentAdmin(admin.ModelAdmin):
     get_html_image.short_description = 'Миникарта'  # изменяет имя сверху таблицы с get_html_image на указанное
 
 
-# место на карте
 @admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
+    """Модель мест на карте(плентов) для админки"""
     prepopulated_fields = {'slug': ('name',)}
     list_display = ['name']
     list_filter = ['name']
@@ -88,9 +86,10 @@ class PlaceAdmin(admin.ModelAdmin):
     ordering = []
 
 
-# комментарии
 @admin.register(Comments)
 class CommentsAdmin(admin.ModelAdmin):
+    """Модель комментариев для админки"""
+
     list_display = ['name', 'grenade', 'parents']
     list_per_page = 10
     search_fields = ['name']
