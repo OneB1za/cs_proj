@@ -18,13 +18,11 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-'''Админка'''
-admin.site.site_header = 'Главная страница'
-admin.site.index_title = 'Таблицы для создания записей на сайте'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('mainapp.urls'))
+    path('', include('mainapp.urls')),
+    path('captcha/', include('captcha.urls')),
 ]
 
 if settings.DEBUG:

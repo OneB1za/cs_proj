@@ -1,0 +1,26 @@
+
+{% extends 'mainapp/base.html' %}
+
+{% block title %} --- {% endblock title %}
+
+{% block content %}
+
+    <h2>Контактные данные форма заполнения</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-errors">
+            {{ form.non_field_errors }}
+        </div>
+
+        {% for f in form %}
+
+            <p><label for="{{ f.if_for_label }}">{{ f.label }}:</label>{{ f }}</p>
+            <div class="form-error">{{ f.errors }}</div>
+
+        {% endfor %}
+
+        <button type="submit">Отправить</button>
+    </form>
+{% endblock content %}

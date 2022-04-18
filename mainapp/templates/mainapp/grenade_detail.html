@@ -1,0 +1,60 @@
+
+{% extends 'mainapp/base.html' %}
+{% block title %}
+    {% for grenade in grenades %}
+        {{ grenade.title }}
+    {% endfor %}
+{% endblock title %}
+
+{% block content %}
+    {% for grenade in grenades %}
+        <p>{{ grenade.title }}</p>
+        <p>{{ grenade.description }} ОПИСАНИЕ ОПИСАНИЕ НЕ БАГ</p>
+        <img src="{{ grenade.image.url }}" alt="{{ grenade.image }}" width="650px" height="400">
+
+
+        <video controls width="650px" height="400">
+            <source src="{{ grenade.video.url }}" >
+        </video>
+
+
+
+    <form action="{% url 'add_comments' grenade.id %}" method="post" id="formComments">
+             {% csrf_token %}
+
+             <input type="hidden" name="parent" id="contactparent" value="">
+
+             <div>
+                <label for="contactcomments">Ваш комментарий</label>
+                <textarea name="text" id="contactcomments" cols="25" rows="7" required=""></textarea>
+             </div>
+
+             <div>
+                <label for="contactusername">Имя</label>
+                <input type="text" name="name" id="contactusername">
+            </div>
+
+            <div>
+                <label for="contactemail">Email</label>
+                <input type="text" name="email" id="contactemail">
+            </div>
+
+            <button type="submit">Опубликовать</button>
+
+        </form>
+
+        {% for comment in grenade.comments_set.all %}
+            <p>Имя - {{ comment.name }}</p>
+            <p >Комментарий:</p>
+            <p style="padding-left: 15px">{{ comment.text }}</p>
+            <a href="#formComments" onclick="addComments('{{ comment.name }}', '{{ comment.id }}')">Ответить..</a>
+        {% endfor %}
+
+    {% endfor %}
+    <script type="text/javascript">
+        function addComments(name, id) {
+            document.getElementById("contactparent").value = id;
+            document.getElementById("contactcomments").innerText = `${name}, `
+        }
+    </script>
+{% endblock content %}
