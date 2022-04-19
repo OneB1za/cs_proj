@@ -7,7 +7,7 @@ from .forms import (ContactForm, CommentsForm)
 from .models import (Content, MapCsGo, Place)
 
 
-def test_view(request):
+def home_page_view(request): # Home_page_view
     """Функция представления главной страницы"""
 
     maps = MapCsGo.objects.all()
@@ -18,7 +18,7 @@ def test_view(request):
     return render(request, 'mainapp/base.html', context=context)
 
 
-def detail_view_maps_and_grenads(request, map_name, *args, **kwargs):
+def places_on_the_map_view(request, map_name, *args, **kwargs):
     """Функция представления возвращающая страницу
         с местами раскидки на карте"""
 
@@ -33,7 +33,7 @@ def detail_view_maps_and_grenads(request, map_name, *args, **kwargs):
     return render(request, 'mainapp/detail_category.html', context=context)
 
 
-def place_detail_view(request, map_name: str, place: str):
+def grenades_list_view(request, map_name: str, place: str):
     """Функция представления возвращающая страницу
         с списком раскидок"""
 
